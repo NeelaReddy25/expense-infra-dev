@@ -74,6 +74,7 @@ resource "null_resource" "backend_delete" {
     depends_on = [ aws_ami_from_instance.backend ]
 }
 
+
 resource "aws_lb_target_group" "backend" {
   name     = "${var.project_name}-${var.environment}-${var.common_tags.Component}"
   port     = 8080
@@ -110,7 +111,6 @@ resource "aws_launch_template" "backend" {
     )
   }
 }
-
 
 
 resource "aws_autoscaling_group" "backend" {
@@ -152,11 +152,9 @@ resource "aws_autoscaling_group" "backend" {
   }
 }
 
-
-
 resource "aws_autoscaling_policy" "backend" {
-  name = "${var.project_name}-${var.environment}-${var.common_tags.Component}"
-  policy_type = "TargetTrackingScaling"
+  name                   = "${var.project_name}-${var.environment}-${var.common_tags.Component}"
+  policy_type            = "TargetTrackingScaling"
   autoscaling_group_name = aws_autoscaling_group.backend.name
 
   target_tracking_configuration {
@@ -170,10 +168,10 @@ resource "aws_autoscaling_policy" "backend" {
 
 resource "aws_lb_listener_rule" "backend" {
   listener_arn = data.aws_ssm_parameter.app_alb_listener_arn.value
-  priority = 100 #less number will be first validated
+  priority     = 100 # less number will be first validated
 
   action {
-    type = "forward"
+    type             = "forward"
     target_group_arn = aws_lb_target_group.backend.arn
   }
 
