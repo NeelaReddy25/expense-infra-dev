@@ -24,12 +24,11 @@ pipeline {
                 """
             }
         }
-        
-        input {
-            message "should we continue?"
-            ok "yes,we should."
-        }
         stage ('Deploy') {
+            input {
+                message "Should we continue?"
+                ok "Yes, we should."
+            }
             steps {
                 sh """
                 cd 01-vpc
